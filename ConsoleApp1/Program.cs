@@ -25,7 +25,12 @@ namespace ConsoleApp1
             //Console.WriteLine($"Factorial of: { number } is { Factorial(number) }.");
             //Console.WriteLine($"Fibonacci of: { number } is { Fibonacci(number) }.");          
 
-            Util.SayHello();
+            //Util.SayHello();
+
+            for (int i = 0; i < 200; i++)
+            {
+                IsPrimeNumber(i);
+            }
 
             Console.WriteLine("Press Enter to Exit");
             Console.ReadLine();
@@ -67,6 +72,15 @@ namespace ConsoleApp1
         {
             if (number == 0 || number == 1) { return 1; }
             return Fibonacci(number - 1) + Fibonacci(number - 2);
+        }
+
+        public static void IsPrimeNumber(int number)
+        {
+            if (number == 2 || number == 3) { Console.Write($"{number},"); return; }
+            for (int i = 1; i <= number; i++)
+            {
+                if (i != 1 && i != number && !(number % i == 0)) { Console.Write($"{number},"); return; }
+            }
         }
     }
 }
