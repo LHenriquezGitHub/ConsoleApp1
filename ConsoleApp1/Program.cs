@@ -1,8 +1,11 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ConsoleApp1.SolveProblems;
 using Greenhouse.Data.Model.Setup;
 using Newtonsoft.Json;
 
@@ -10,7 +13,100 @@ namespace ConsoleApp1
 {
     public class Program
     {
+        
 
+        static void Main(string[] args)
+        {
+
+
+            var mimPageFlips = HackerRank.DrawingBook(5, 4);
+
+            int[] socks = new int[]{ 10, 20, 20, 10, 10, 30, 50, 10, 20, 10, 20, 20, 10, 10, 30, 50, 10, 20 };
+        var socksPair = HackerRank.MatchingSocksAvailable(socks);
+
+            #region overload get
+
+            //var one = Util.Get(1);
+
+            #endregion  
+
+            #region interface
+            /*
+            Animal animal = new Dog();            
+            animal.WhatDoYouSay();
+            animal = new Cat();
+            animal.WhatDoYouSay();
+            animal = new Unknown();
+            animal.WhatDoYouSay();
+            animal = new NoAnimal();
+            animal.WhatDoYouSay();
+            animal.WhatDoYouEat();
+
+            //Regex regexByDate = new Regex(@"(\d+)[-.\/](\d+)[-.\/](\d+)");
+            //Console.WriteLine(regexByDate.Match("blahblah20190101.csv").Value);
+            //Console.WriteLine(regexByDate.Match("blahblah2019-01-01.csv").Value);
+            //Console.WriteLine(regexByDate.Match("blahblah2019-1-1.csv").Value);
+            //Console.WriteLine(regexByDate.Match("blahblah2019-1-01.csv").Value);
+            //Console.WriteLine(regexByDate.Match("blahblah_20182019-01-1.csv").Value);
+            */
+            #endregion
+
+            Console.WriteLine("Press Enter to Exit");
+            Console.ReadLine();
+        }
+
+        public static void MatchDate()
+        {
+            List<DateTime> importedDates = new List<DateTime>()
+            {
+                new DateTime (2019,03,28),new DateTime (2019,03,27),
+                new DateTime (2019,03,26),new DateTime (2019,03,25),
+                new DateTime (2019,03,24),new DateTime (2019,03,23)
+            };
+
+            List<string> remoteDatesStr1 = new List<string>()
+            {
+                "20190328", "20190327", "20190326", "20190325", "20190324", "20190323",
+                "20190322", "20190321", "20190320", "20190319", "20190318", "20190317"
+            };
+            List<string> remoteDatesStr2 = new List<string>()
+            {
+                "2019-03-28", "2019-03-27", "2019-03-26", "2019-03-25", "2019-03-24", "2019-03-23",
+                "2019-03-22", "2019-03-21", "2019-03-20", "2019-03-19", "2019-03-18", "2019-03-17"
+            };
+            List<string> remoteDatesStr3 = new List<string>()
+            {
+                "2019/03/28", "2019/03/27", "2019/03/26", "2019/03/25", "2019/03/24", "2019/03/23",
+                "2019/03/22", "2019/03/21", "2019/03/20", "2019/03/19", "2019/03/18", "2019/03/17"
+            };
+            
+            var dates1 = remoteDatesStr1.Select(date => DateTime.ParseExact(date, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture));
+            var dates2 = remoteDatesStr2.Select(date => DateTime.ParseExact(date, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture));
+            var dates3 = remoteDatesStr3.Select(date => DateTime.ParseExact(date, "yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture));
+
+            //List<DateTime> remoteDates1 = importedDates.Select(fileDate => fileDate).ToList();
+            //List<DateTime> remoteDates2 = importedDates.Select(fileDate => fileDate).ToList();
+            //List<DateTime> remoteDates3 = importedDates.Select(fileDate => fileDate).ToList();
+
+            //remoteDates1.Add(new DateTime(2019, 03, 11));
+            //remoteDates2.Add(new DateTime(2019, 03, 12));
+            //remoteDates3.Add(new DateTime(2019, 03, 13));
+
+            var importedFilesByDate = importedDates.Select(fileDate => fileDate).ToList();
+
+            //var remoteFilesByDateMissing1 = (importedFilesByDate?.Count() < 1) ? remoteDates1 : remoteDates1.Except(importedFilesByDate).Select(f => f);
+            //var remoteFilesByDateMissing2 = (importedFilesByDate?.Count() < 1) ? remoteDates2 : remoteDates2.Except(importedFilesByDate).Select(f => f);
+            //var remoteFilesByDateMissing3 = (importedFilesByDate?.Count() < 1) ? remoteDates2 : remoteDates3.Except(importedFilesByDate).Select(f => f);
+
+            var DateMissing1 = (importedFilesByDate?.Count() < 1) ? dates1 : dates1.Except(importedFilesByDate);
+            var DateMissing2 = (importedFilesByDate?.Count() < 1) ? dates2 : dates2.Except(importedFilesByDate);
+            var DateMissing3 = (importedFilesByDate?.Count() < 1) ? dates3 : dates3.Except(importedFilesByDate);
+
+            //Create file group by date and import
+            var remoteFileGroupsMissing1 = DateMissing1.GroupBy(fileItems => fileItems).ToDictionary(dictionaryFileItem => dictionaryFileItem.Key, fileItem => fileItem);
+            var remoteFileGroupsMissing2 = DateMissing2.GroupBy(fileItems => fileItems).ToDictionary(dictionaryFileItem => dictionaryFileItem.Key, fileItem => fileItem);
+            var remoteFileGroupsMissing3 = DateMissing2.GroupBy(fileItems => fileItems).ToDictionary(dictionaryFileItem => dictionaryFileItem.Key, fileItem => fileItem);
+        }
 
         /// <summary>
         /// Group by SourceFilename by renaming the Key 
@@ -23,241 +119,15 @@ namespace ConsoleApp1
         {
             var nameArray = sourceFilename.Split('_');
             var nameArrayLength = nameArray.Length;
-            var nameStartIndex = 4; 
-            var nameLoopLength = (nameArrayLength - 8) + nameStartIndex;
+            var nameStartIndex = 4;
+            //var nameLoopLength = (nameArrayLength - 8) + nameStartIndex;
+            var nameLoopLength = nameArrayLength - nameStartIndex;
             var filename = string.Empty;
             for (int i = 4; i < nameLoopLength; i++)
             {
                 filename += nameArray[i];
             }
             return filename;
-        }
-
-        static void Main(string[] args)
-        {
-
-
-            List<FileClass> _importFiles = new List<FileClass>() {
-
-                 new FileClass() {Name = "dcm_account49701_match_table_activity_cats_20190121_20190122_032810_2063247693.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T02:28:13.154Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_activity_types_20190121_20190122_034056_2063234129.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T02:40:58.256Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_ad_placement_assignments_20190121_20190122_040259_2063247699.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T03:03:01.951Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_ads_20190121_20190122_034059_2063234131.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T02:41:02.355Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_ads_20190121_20190122_035432_2063234131.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T02:54:35.241Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_ads_20190121_20190122_035432_2063234131.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T03:54:35.241Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_ads_20190121_20190122_035432_2063234131.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T04:54:35.241Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_advertisers_20190121_20190122_034542_2063247597.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T02:45:44.447Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_browsers_20190121_20190122_034535_2063247599.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T02:45:37.056Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_campaigns_20190121_20190122_034059_2063247596.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T02:41:02.172Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_cities_20190121_20190122_040257_2063247700.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T03:02:59.546Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_creative_ad_assignments_20190121_20190122_040304_2063234122.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T03:03:07.254Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_creatives_20190121_20190122_040303_2063234121.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T03:03:05.848Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_custom_creative_fields_20190121_20190122_034052_2063247694.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T02:40:54.993Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_custom_floodlight_variables_20190121_20190122_034050_2063247590.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T02:40:52.587Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_custom_rich_media_20190121_20190122_032757_2063234118.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T02:27:59.887Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_designated_market_areas_20190121_20190122_032801_2063247593.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T02:28:03.949Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_keyword_value_20190121_20190122_032804_2063234125.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T02:28:07.458Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_operating_systems_20190121_20190122_032757_2063234123.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T02:27:59.412Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_paid_search_20190121_20190122_040249_2063234130.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T03:02:50.943Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_placement_cost_20190121_20190122_032810_2063247598.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T02:28:13.131Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_placements_20190121_20190122_034109_2063247591.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T02:41:12.056Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_sites_20190121_20190122_034050_2063247695.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T02:40:53.28Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_states_20190121_20190122_040254_2063247592.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T03:02:56.346Z").UtcDateTime }
-                ,new FileClass() {Name = "dcm_account49701_match_table_empire_states_of_mind_20190121_20190122_040254_2063247592.csv.gz",LastWriteTimeUtc = DateTimeOffset.Parse("2019-01-22T03:02:56.346Z").UtcDateTime }
-
-            };
-
-            var importFileDictionary =_importFiles.GroupBy(item => ConvertToSourceFilename(item.Name)).ToDictionary(d => d.Key, f => f.ToList());
-            var temp2 = importFileDictionary.Select(d => d.Value.OrderByDescending(f => f.LastWriteTimeUtc).FirstOrDefault()).ToList();
-
-
-            var uno = "";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            var result = "{\"Success\":true,\"ServiceResults\":[{\"Success\":true,\"Operation\":1,\"Server\":{\"ServerID\":2,\"ServerAlias\":\"QA-DATALOAD\",\"ServerMachineName\":\"DTIONEPR01-UE1T.cloud.vivaki.com\",\"ServerName\":\"DTIONEPR01-UE1T\",\"ServerIP\":\"172.18.30.177\",\"ServerTypeID\":1,\"ClusterID\":2,\"TimeZoneString\":\"Eastern Standard Time;-300;(UTC-05:00) Eastern Time (US & Canada);Eastern Standard Time;Eastern Daylight Time;[01:01:0001;12:31:2006;60;[0;02:00:00;4;1;0;];[0;02:00:00;10;5;0;];][01:01:2007;12:31:9999;60;[0;02:00:00;3;2;0;];[0;02:00:00;11;1;0;];];\",\"IsActive\":true,\"CreatedDate\":\"2017-06-29T16:31:04.113\",\"LastUpdated\":\"2018-02-06T20:31:13.783\"},\"ServiceName\":\"GreenhouseWinService$QA-DATALOAD\",\"Status\":1,\"Error\":null,\"AdditionalInfo\":\"GreenhouseWinService$QA-DATALOAD transitioned from Running to Stopped\",\"Message\":\"Attempting Stop for service: GreenhouseWinService$QA-DATALOAD on server: DTIONEPR01-UE1T...Success! Status is: Stopped. Additional info: GreenhouseWinService$QA-DATALOAD transitioned from Running to Stopped\"},{\"Success\":true,\"Operation\":1,\"Server\":{\"ServerID\":5,\"ServerAlias\":\"QA-IMPORT\",\"ServerMachineName\":\"DTIONEIM01-UE1T.cloud.vivaki.com\",\"ServerName\":\"DTIONEIM01-UE1T\",\"ServerIP\":\"172.18.30.247\",\"ServerTypeID\":1,\"ClusterID\":2,\"TimeZoneString\":\"Eastern Standard Time;-300;(UTC-05:00) Eastern Time (US & Canada);Eastern Standard Time;Eastern Daylight Time;[01:01:0001;12:31:2006;60;[0;02:00:00;4;1;0;];[0;02:00:00;10;5;0;];][01:01:2007;12:31:9999;60;[0;02:00:00;3;2;0;];[0;02:00:00;11;1;0;];];\",\"IsActive\":true,\"CreatedDate\":\"2017-06-29T16:43:54.15\",\"LastUpdated\":\"2017-06-29T16:43:54.15\"},\"ServiceName\":\"GreenhouseWinService$QA-IMPORT\",\"Status\":1,\"Error\":null,\"AdditionalInfo\":\"GreenhouseWinService$QA-IMPORT was already stopped y'know, forgetaboutit\",\"Message\":\"Attempting Stop for service: GreenhouseWinService$QA-IMPORT on server: DTIONEIM01-UE1T...Success! Status is: Stopped. Additional info: GreenhouseWinService$QA-IMPORT was already stopped y'know, forgetaboutit\"},{\"Success\":true,\"Operation\":1,\"Server\":{\"ServerID\":6,\"ServerAlias\":\"QA-WEBSERVER\",\"ServerMachineName\":\"DTIONEWS01-UE1T.cloud.vivaki.com\",\"ServerName\":\"DTIONEWS01-UE1T\",\"ServerIP\":\"172.18.30.245\",\"ServerTypeID\":3,\"ClusterID\":2,\"TimeZoneString\":\"Eastern Standard Time;-300;(UTC-05:00) Eastern Time (US & Canada);Eastern Standard Time;Eastern Daylight Time;[01:01:0001;12:31:2006;60;[0;02:00:00;4;1;0;];[0;02:00:00;10;5;0;];][01:01:2007;12:31:9999;60;[0;02:00:00;3;2;0;];[0;02:00:00;11;1;0;];];\",\"IsActive\":true,\"CreatedDate\":\"2017-06-29T16:44:54.96\",\"LastUpdated\":\"2017-06-29T16:44:54.96\"},\"ServiceName\":\"GreenhouseWinService$QA-WEBSERVER\",\"Status\":1,\"Error\":null,\"AdditionalInfo\":\"GreenhouseWinService$QA-WEBSERVER was already stopped y'know, forgetaboutit\",\"Message\":\"Attempting Stop for service: GreenhouseWinService$QA-WEBSERVER on server: DTIONEWS01-UE1T...Success! Status is: Stopped. Additional info: GreenhouseWinService$QA-WEBSERVER was already stopped y'know, forgetaboutit\"},{\"Success\":true,\"Operation\":1,\"Server\":{\"ServerID\":233,\"ServerAlias\":\"QA-AGGIMPORT\",\"ServerMachineName\":\"DTIONEIM02-UE1T.cloud.vivaki.com\",\"ServerName\":\"DTIONEIM02-UE1T\",\"ServerIP\":\"172.18.30.198\",\"ServerTypeID\":1,\"ClusterID\":2,\"TimeZoneString\":\"Eastern Standard Time;-300;(UTC-05:00) Eastern Time (US & Canada);Eastern Standard Time;Eastern Daylight Time;[01:01:0001;12:31:2006;60;[0;02:00:00;4;1;0;];[0;02:00:00;10;5;0;];][01:01:2007;12:31:9999;60;[0;02:00:00;3;2;0;];[0;02:00:00;11;1;0;];];\",\"IsActive\":true,\"CreatedDate\":\"2019-01-14T22:17:56.087\",\"LastUpdated\":\"2019-01-14T22:17:56.087\"},\"ServiceName\":\"GreenhouseWinService$QA-AGGIMPORT\",\"Status\":1,\"Error\":null,\"AdditionalInfo\":\"GreenhouseWinService$QA-AGGIMPORT was already stopped y'know, forgetaboutit\",\"Message\":\"Attempting Stop for service: GreenhouseWinService$QA-AGGIMPORT on server: DTIONEIM02-UE1T...Success! Status is: Stopped. Additional info: GreenhouseWinService$QA-AGGIMPORT was already stopped y'know, forgetaboutit\"}]}";
-            var response = JsonConvert.DeserializeObject<Greenhouse.Deployment.WCF.ServiceCallResponse>(result);
-                                 
-            var one = $"search index=\"0\" *1*";
-            var two = System.Net.WebUtility.HtmlEncode(one);
-            var three = System.Net.WebUtility.UrlEncode(one);
-
-
-            var si1 = SplunkIndex("LOCALDEV");
-            var si2 = SplunkIndex("PROD");
-            var si3 = SplunkIndex("TEST");
-            var si4 = SplunkIndex("DEV");
-            var si5 = SplunkIndex("");
-
-
-            //cld_conversions_feed_2018121000.done
-            var filename = "GP_cld_conversions_feed_01_2018121000.tar.gz";
-            var nameArray = filename.Split('_');
-            var nameArrayLength = nameArray.Length;
-
-            var colNames = nameArray.Where((name, index) => index > 0 && index != (nameArrayLength-2));
-
-
-
-            var doneFileNamestring = string.Join("_", colNames).Replace(".tar.gz", ".done");
-
-
-            List<FileClass> fileList = new List<FileClass>
-            {
-               new FileClass() {  Name = "GP_cld_standard_display_feed_01_2018120300.tar.gz", Extension = ".gz" },
-               new FileClass() {  Name = "GP_cld_standard_display_feed_01_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_01_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_01_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_02_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_02_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_02_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_02_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_03_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_03_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_03_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_03_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_04_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_04_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_04_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_04_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_05_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_05_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_05_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_05_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_06_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_06_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_06_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_06_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_07_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_07_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_07_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_07_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_08_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_08_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_08_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_08_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_09_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_09_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_09_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_09_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_10_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_10_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_10_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_10_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_11_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_11_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_11_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_11_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_12_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_12_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_12_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_12_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_13_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_13_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_13_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_13_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_14_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_14_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_14_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_14_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_15_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_15_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_15_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_15_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_16_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_16_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_16_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_16_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_17_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_17_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_17_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_17_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_18_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_18_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_18_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_18_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_19_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_19_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_19_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_19_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_20_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_20_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_20_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_20_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_21_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_21_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_21_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_21_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_22_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_22_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_22_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_22_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_23_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_23_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_23_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_23_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_24_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_24_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_24_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_24_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_25_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_25_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_25_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_25_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_26_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_26_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_26_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_26_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_27_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_27_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_27_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_27_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_28_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_28_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_28_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_28_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_29_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_29_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_29_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_29_2018120318.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_30_2018120300.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_30_2018120305.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_30_2018120315.tar.gz", Extension = ".gz"},
-               new FileClass() {  Name = "GP_cld_standard_display_feed_30_2018120318.tar.gz", Extension = ".gz"},
-
-               //new FileClass() {  Name = "CLD_standard_display_feed_2018120300.done", Extension = ".done" },
-               //new FileClass() {  Name = "CLD_standard_display_feed_2018120305.done", Extension = ".done" },
-               //new FileClass() {  Name = "CLD_standard_display_feed_2018120315.done", Extension = ".done" },
-               new FileClass() {  Name = "CLD_standard_display_feed_2018120318.done", Extension = ".done" }
-
-
-            };
-            var dList = fileList.Where(file => file.Extension == ".done").ToList();
-            var fList = fileList.Where(file => file.Extension != ".done").ToList();
-
-            GroupFiles(fList, dList);
-
-
-            Console.WriteLine("Press Enter to Exit");
-            Console.ReadLine();
         }
 
         private static object MethodTemp(DateTime lastWriteTimeUtc)
@@ -369,17 +239,27 @@ namespace ConsoleApp1
             return Math.Abs(leftSum - rightSum);
         }
 
-
         public static int Factorial(int number)
         {
             if (number == 0 || number == 1) { return 1; }
             return number * Factorial(number - 1);
         }
+
         public static int Fibonacci(int number)
         {
-            if (number == 0 || number == 1) { return 1; }
+            if (number <= 1) return number;
             return Fibonacci(number - 1) + Fibonacci(number - 2);
         }
+
+        public static int FibonacciMemoization(int number, int[] f)
+        {
+            if (number <= 1) return number;
+            //if(f[number])
+            var value = Fibonacci(number - 1) + Fibonacci(number - 2);
+            f[number] = value;
+            return value;
+        }
+
 
         public static void IsPrimeNumber(int number)
         {
