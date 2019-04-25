@@ -13,16 +13,53 @@ namespace ConsoleApp1
 {
     public class Program
     {
-        
+
 
         static void Main(string[] args)
         {
 
+            int[][] arr = new int[6][];
+
+            arr[0] = new int[] { 1, 1, 1, 0, 0, 0 };
+            arr[1] = new int[] { 0, 1, 0, 0, 0, 0 };
+            arr[2] = new int[] { 1, 1, 1, 0, 0, 0 };
+            arr[3] = new int[] { 0, 0, 2, 4, 4, 0 };
+            arr[4] = new int[] { 0, 0, 0, 2, 0, 0 };
+            arr[5] = new int[] { 0, 0, 1, 2, 4, 0 };
+
+            //arr[0] = new int[] { -9, -9, -9, 1, 1, 1 };
+            //arr[1] = new int[] { 0, -9, 0, 4, 3, 2 };
+            //arr[2] = new int[] { -9, -9, -9, 1, 2, 3 };
+            //arr[3] = new int[] { 0, 0, 8, 6, 6, 0 };
+            //arr[4] = new int[] { 0, 0, 0, -2, 0, 0 };
+            //arr[5] = new int[] { 0, 0, 1, 2, 4, 0 };
+
+
+            //arr[0] = new int[] { -1, -1, 0, -9, -2, -2 };
+            //arr[1] = new int[] { -2, -1, -6, -8, -2, -5 };
+            //arr[2] = new int[] { -1, -1, -1, -2, -3, -4 };
+            //arr[3] = new int[] { -1, -9, -2, -4, -4, -5 };
+            //arr[4] = new int[] { -7, -3, -3, -2, -9, -9 };
+            //arr[5] = new int[] { -1, -3, -1, -2, -4, -5 };
+
+            var maxSubsetArraySum = HackerRank.HourglassSum(arr);
+
+            string stringPath = "DDUUUUDD";
+            var numberOfValleys = HackerRank.CountingValleys(stringPath.Length, stringPath);
+
+            string singleString = "a";
+            long numberOfChar = 1000000000000;
+
+            var numberofOccurrence = HackerRank.RepeatedString(singleString, numberOfChar);
+
+            int[] clouds = new int[] { 0, 1, 0, 0, 0, 1, 0 };
+            var cloudJumps = HackerRank.JumpingOnClouds(clouds);
+
 
             var mimPageFlips = HackerRank.DrawingBook(5, 4);
 
-            int[] socks = new int[]{ 10, 20, 20, 10, 10, 30, 50, 10, 20, 10, 20, 20, 10, 10, 30, 50, 10, 20 };
-        var socksPair = HackerRank.MatchingSocksAvailable(socks);
+            int[] socks = new int[] { 10, 20, 20, 10, 10, 30, 50, 10, 20, 10, 20, 20, 10, 10, 30, 50, 10, 20 };
+            var socksPair = HackerRank.MatchingSocksAvailable(socks);
 
             #region overload get
 
@@ -79,7 +116,7 @@ namespace ConsoleApp1
                 "2019/03/28", "2019/03/27", "2019/03/26", "2019/03/25", "2019/03/24", "2019/03/23",
                 "2019/03/22", "2019/03/21", "2019/03/20", "2019/03/19", "2019/03/18", "2019/03/17"
             };
-            
+
             var dates1 = remoteDatesStr1.Select(date => DateTime.ParseExact(date, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture));
             var dates2 = remoteDatesStr2.Select(date => DateTime.ParseExact(date, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture));
             var dates3 = remoteDatesStr3.Select(date => DateTime.ParseExact(date, "yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture));
@@ -159,28 +196,28 @@ namespace ConsoleApp1
         /// The new Splunk instance indexes are named after environments.
         /// datalake (For PROD), staging_datalake, qa_datalake, dev_datalake
         /// </summary>
-        public static string SplunkIndex (string env)
+        public static string SplunkIndex(string env)
         {
             //get
             //{
-                string indexPrefix = string.Empty;
-                var environment = env;
-                switch (environment)
-                {
-                    case "LOCALDEV":
-                        indexPrefix = "dev";
-                        break;
-                    case "PROD":
-                        break;
-                    case "TEST":
-                        indexPrefix = "qa";
-                        break;
-                    default:
-                        indexPrefix = environment.ToLower();
-                        break;
-                }
-                string indexName = (string.IsNullOrEmpty(indexPrefix)) ? $"datalake": $"{indexPrefix}_datalake";
-                return indexName;
+            string indexPrefix = string.Empty;
+            var environment = env;
+            switch (environment)
+            {
+                case "LOCALDEV":
+                    indexPrefix = "dev";
+                    break;
+                case "PROD":
+                    break;
+                case "TEST":
+                    indexPrefix = "qa";
+                    break;
+                default:
+                    indexPrefix = environment.ToLower();
+                    break;
+            }
+            string indexName = (string.IsNullOrEmpty(indexPrefix)) ? $"datalake" : $"{indexPrefix}_datalake";
+            return indexName;
             //}
         }
 
@@ -314,4 +351,3 @@ namespace ConsoleApp1
 
 
 }
-
